@@ -15,5 +15,7 @@ COPY package.json .
 COPY package-lock.json .
 RUN npm install
 
+ENV NPM_CONFIG_PREFIX /opt/test-runner/node_modules
+
 COPY . .
 ENTRYPOINT ["/opt/test-runner/bin/run.sh"]
