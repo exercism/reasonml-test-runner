@@ -1,1 +1,6 @@
 tests/**/results.json
+tests/**/node_modules/
+tests/**/lib/
+tests/**/*.js
+tests/**/.merlin
+

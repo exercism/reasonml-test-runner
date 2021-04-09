@@ -1,5 +1,5 @@
 {
   "version": 1,
   "status": "fail",
-  "output": "TODO: replace with correct output"
+  "output": "FAILED: src/Leap-Leap.cmj /solution/src/Leap.bs.js \n/solution/node_modules/bs-platform/linux/bsc.exe -bs-package-name leap -bs-ns Leap  -bs-package-output commonjs:src -color always -bs-suffix -bs-read-cmi -I . -I src -warn-error +101  -o src/Leap-Leap.cmj src/Leap.reast\n\n  We've found a bug for you!\n  /solution/src/Leap.re\n  \n  The implementation /solution/src/Leap.re\n       does not match the interface src/Leap-Leap.cmi:\n       The value `isLeapYear' is required but not provided\n       File \"/solution/src/Leap.rei\", line 1, characters 0-27:\n         Expected declaration\n  \nFAILED: subcommand failed."
 }
