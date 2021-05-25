@@ -56,7 +56,7 @@ else
         sanitized_test_output=$(printf "${sanitized_test_output}" | sed -n '/^FAILED:/,$p')        
     fi
 
-    jq -n --arg output "${sanitized_test_output}" '{version: 1, status: "fail", output: $output}' > ${results_file}
+    jq -n --arg output "${sanitized_test_output}" '{version: 1, status: "fail", message: $output}' > ${results_file}
 fi
 
 echo "${slug}: done"
