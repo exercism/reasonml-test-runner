@@ -1,4 +1,4 @@
-FROM node:erbium-buster-slim as runner
+FROM node:iron-buster-slim AS runner
 
 RUN apt-get update && \
     apt-get install -y jq && \
@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ENV NO_UPDATE_NOTIFIER true
+ENV NO_UPDATE_NOTIFIER=true
 
 WORKDIR /opt/test-runner
 
