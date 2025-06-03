@@ -1,4 +1,4 @@
-FROM node:iron-buster-slim AS runner
+FROM node:22-bookworm-slim AS runner
 
 RUN apt-get update && \
     apt-get install -y jq && \
