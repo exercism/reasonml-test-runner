@@ -43,17 +43,17 @@ exit_code=$?
 
 popd > /dev/null
 
-# Write the results.json file based on the exit code of the command that was 
+# Write the results.json file based on the exit code of the command that was
 # just executed that tested the implementation file
 if [ $exit_code -eq 0 ]; then
     jq -n '{version: 1, status: "pass"}' > ${results_file}
 else
     # Sanitize the output
-    sanitized_test_output=$(printf "${test_output}" | sed -n '/npm ERR/q;p')
+    sanitized_test_output=$(printf "${test_output}" | sed -n '/processTicksAndRejections/d; /npm ERR/q; p')
     if [[ "${sanitized_test_output}" =~ "--color" ]]; then
         sanitized_test_output=$(printf "${sanitized_test_output}" | sed -n '1,/--color/!p')
     else
-        sanitized_test_output=$(printf "${sanitized_test_output}" | sed -n '/^FAILED:/,$p')        
+        sanitized_test_output=$(printf "${sanitized_test_output}" | sed -n '/^FAILED:/,$p')
     fi
 
     jq -n --arg output "${sanitized_test_output}" '{version: 1, status: "fail", message: $output}' > ${results_file}
