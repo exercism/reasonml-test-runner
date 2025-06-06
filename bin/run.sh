@@ -49,7 +49,7 @@ if [ $exit_code -eq 0 ]; then
     jq -n '{version: 1, status: "pass"}' > ${results_file}
 else
     # Sanitize the output
-    sanitized_test_output=$(sed -n '/processTicksAndRejections/d; s/Time:.*$//; /npm ERR/q; p' <<< "${test_output}")
+    sanitized_test_output=$(printf "${test_output}" | sed -n '/processTicksAndRejections/d; /npm ERR/q; p')
     if [[ "${sanitized_test_output}" =~ "--color" ]]; then
         sanitized_test_output=$(printf "${sanitized_test_output}" | sed -n '1,/--color/!p')
     else

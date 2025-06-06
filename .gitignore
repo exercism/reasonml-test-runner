@@ -1,6 +1,6 @@
 tests/**/results.json
 tests/**/node_modules/
-tests/**/lib/bs/
-tests/**/*.bs.js
+tests/**/lib/
+tests/**/*.js
 tests/**/.merlin
-tests/**/_build
+

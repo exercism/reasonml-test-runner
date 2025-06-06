@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Synopsis:
-# Test the test runner by running it against a predefined set of solutions
+# Test the test runner by running it against a predefined set of solutions 
 # with an expected output.
 
 # Output:
@@ -24,7 +24,8 @@ for test_dir in tests/*; do
 
     # Normalize the results file
     sed -i -E \
-      -e 's/ *\([0-9]+[[:space:]]*ms\)//g' \
+      -e 's/Time:.*[0-9]+\.[0-9]+s//g' \
+      -e 's/ *\([0-9]+ms\)//g' \
       -e "s~${test_dir_path}~/solution~g" \
       "${results_file_path}"
 
