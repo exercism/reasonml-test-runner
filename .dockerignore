@@ -6,4 +6,3 @@ tests/
 .gitattributes
 .dockerignore
 Dockerfile
-node_modules/
