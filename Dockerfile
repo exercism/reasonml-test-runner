@@ -1,4 +1,5 @@
-FROM node:lts-slim  AS runner
+# target: lts-trixie-slim
+FROM node:24.18.0-trixie-slim@sha256:366fdef91728b1b7fa18c84fba63b6e79ed77b7e10cc206878e9705da4d7b169
 
 RUN apt-get update && \
     apt-get install -y jq && \
