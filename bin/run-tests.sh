@@ -22,12 +22,21 @@ for test_dir in tests/*; do
 
     bin/run.sh "${test_dir_name}" "${test_dir_path}" "${test_dir_path}"
 
-    # Normalize the results file
+    # Normalize the results file by 
+    # removing test durations,
+    # normalizing container paths,
+    # normalizing reported Jest file names,
+    # removing line and column numbers,
+    # and removing the Jest time duration summary.
     sed -i -E \
-      -e 's/Time:.*[0-9]+\.[0-9]+s//g' \
-      -e 's/ *\([0-9]+ms\)//g' \
-      -e "s~${test_dir_path}~/solution~g" \
-      "${results_file_path}"
+        -e 's/ \([0-9]+ ms\)//g' \
+        -e 's|/opt/test-runner/tests/[^/]+/|/solution/|g' \
+        -e 's/jest\.bs\.js/jest.js/g' \
+        -e 's/(:[0-9]+)+//g' \
+        -e 's/\\n(\\u001b|\x1b)\[1mTime:[^\\n]*//g' \
+        -e 's/\x1b\[22m +[0-9.]+[[:space:]]*s//g' \
+        -e 's/\\u001b\[22m +[0-9.]+[[:space:]]*s//g' \
+        "${results_file_path}"
 
     echo "${test_dir_name}: comparing results.json to expected_results.json"
     diff "${results_file_path}" "${expected_results_file_path}"
