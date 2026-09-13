@@ -38,7 +38,7 @@ cp -r "${root_dir}/node_modules" .
 
 # Run the tests for the provided implementation file and redirect stdout and
 # stderr to capture it
-test_output=$(npm run build 2>&1 && npm run test:ci -- --color 2>&1)
+test_output=$(npm run build 2>&1 && COLUMNS=1000 npm run test:ci -- --color 2>&1)
 exit_code=$?
 
 popd > /dev/null

@@ -1,20 +1,41 @@
-# target: lts-trixie-slim
-FROM node:24.18.0-trixie-slim@sha256:366fdef91728b1b7fa18c84fba63b6e79ed77b7e10cc206878e9705da4d7b169
+# node:24.18.0-alpine3.24 == lts-alpine
+FROM node:24.18.0-alpine3.24@sha256:a0b9bf06e4e6193cf7a0f58816cc935ff8c2a908f81e6f1a95432d679c54fbfd AS builder
 
-RUN apt-get update && \
-    apt-get install -y jq && \
-    apt-get purge --auto-remove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+RUN apk add --no-cache python3 make g++ gcompat
+
+COPY package.json package-lock.json ./
+
+RUN npm ci --omit=optional; \
+    npm cache clean --force; \
+    # Remove unused bs-platform binaries and artifacts
+    rm -rf \
+        node_modules/bs-platform/darwin \
+        node_modules/bs-platform/win32 \
+        node_modules/bs-platform/freebsd \
+        node_modules/bs-platform/vendor \
+        node_modules/bs-platform/lib/4.06.1 \
+        node_modules/bs-platform/lib/es6 \
+        .bs .bsb_md5 .bsdeps_js \
+        src/.bs src/.bsb_md5 src/.bsdeps_js; \
+    # Strip debug symbols
+    strip --strip-all node_modules/bs-platform/linux/bsb.exe; \
+    strip --strip-all node_modules/bs-platform/linux/bsc.exe; \
+    strip --strip-all node_modules/bs-platform/linux/ninja.exe; \
+    # Delete unused source files
+    find node_modules/bs-platform/lib/ocaml -type f \( -name "*.cmt" -o -name "*.cmti" -o -name "*.ml" -o -name "*.mli" \) -delete; \
+    find . -type f \( -name "*.cmi" -o -name "*.cmj" -o -name "*.cma" -o -name "*.mlast" -o -name "*.mliast" \) -delete; \
+    true
+
+FROM node:24.18.0-alpine3.24@sha256:a0b9bf06e4e6193cf7a0f58816cc935ff8c2a908f81e6f1a95432d679c54fbfd AS runner
+
+RUN apk add --no-cache bash gcompat jq
 
 ENV NO_UPDATE_NOTIFIER=true
-
 WORKDIR /opt/test-runner
 
-# Pre-install packages
-COPY package.json .
-COPY package-lock.json .
-RUN npm install
+COPY --from=builder /app/node_modules ./node_modules
+COPY bin ./bin
 
-COPY . .
 ENTRYPOINT ["/opt/test-runner/bin/run.sh"]
