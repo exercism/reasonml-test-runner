@@ -1,5 +1,5 @@
 # node:24.18.0-alpine3.24 == lts-alpine
-FROM node:24.18.0-alpine3.24@sha256:a0b9bf06e4e6193cf7a0f58816cc935ff8c2a908f81e6f1a95432d679c54fbfd AS builder
+FROM node:26.10.0-alpine3.24@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS builder
 
 WORKDIR /app
 
@@ -28,7 +28,7 @@ RUN npm ci --omit=optional; \
     find . -type f \( -name "*.cmi" -o -name "*.cmj" -o -name "*.cma" -o -name "*.mlast" -o -name "*.mliast" \) -delete; \
     true
 
-FROM node:24.18.0-alpine3.24@sha256:a0b9bf06e4e6193cf7a0f58816cc935ff8c2a908f81e6f1a95432d679c54fbfd AS runner
+FROM node:26.10.0-alpine3.24@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS runner
 
 RUN apk add --no-cache bash gcompat jq
 
